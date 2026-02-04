@@ -1,0 +1,625 @@
+:root {
+    --bg-color: #f7f9fc;
+    --text-primary: #1a202c;
+    --text-secondary: #4a5568;
+    --card-bg: #ffffff;
+    --accent-color: #3182ce;
+    --accent-dark: #2c5282;
+    --border-color: #e2e8f0;
+    --danger-color: #e53e3e;
+    --warning-color: #dd6b20;
+    --success-color: #38a169;
+    --header-bg: #ffffff;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --btn-bg: #edf2f7;
+    --btn-hover: #e2e8f0;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+.app-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+/* Header */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--header-bg);
+    padding: 1.25rem 2rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--accent-dark);
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.875rem;
+    color: var(--success-color);
+    font-weight: 600;
+    background: #f0fff4;
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+
+.status-indicator.offline {
+    color: var(--danger-color);
+    background: #fff5f5;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background-color: currentColor;
+    border-radius: 50%;
+}
+
+/* Stats Cards */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.stat-card .stat-title {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stat-card .stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--accent-dark);
+    margin-bottom: 0.25rem;
+}
+
+.stat-card .stat-meta {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* Logs Section */
+.card-header {
+    margin-bottom: 1.5rem;
+}
+
+/* New Logic for Query Log Header */
+.log-header-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.log-header-top {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.log-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.card-header h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Inputs & Buttons */
+.search-box input {
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    width: 260px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+.btn-secondary {
+    padding: 0.6rem 1.2rem;
+    border: 1px solid var(--border-color);
+    background-color: white;
+    color: var(--text-primary);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: var(--bg-color);
+    border-color: #cbd5e0;
+}
+
+/* Filters */
+.filters-toolbar {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-color);
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 1rem !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+.mobile-filters {
+    display: none;
+}
+
+.filter-group {
+    font-weight: 500;
+}
+
+.filter-group input,
+.filter-group select {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid #cbd5e0;
+    border-radius: 6px;
+    color: var(--text-primary);
+}
+
+.ml-auto {
+    margin-left: auto;
+}
+
+/* Table */
+.logs-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.logs-table th {
+    text-align: left;
+    padding: 1rem 1.5rem;
+    background-color: #f1f5f9;
+    color: var(--text-secondary);
+    font-weight: 600;
+    border-bottom: 2px solid var(--border-color);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+.logs-table td {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    /* color: var(--text-primary); */
+    font-size: 0.9rem;
+}
+
+.logs-table tr:hover td {
+    background-color: #f8fafc;
+}
+
+/* Clickable IP */
+.clickable-ip {
+    color: var(--accent-color);
+    font-weight: 500;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: background 0.2s;
+    text-decoration: none;
+}
+
+.clickable-ip:hover {
+    background: #ebf8ff;
+    text-decoration: none;
+    color: var(--accent-dark);
+}
+
+/* Table Headers */
+.th-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sortable {
+    cursor: pointer;
+    user-select: none;
+}
+
+.sortable:hover {
+    background-color: #e2e8f0;
+}
+
+.sort-icon {
+    font-size: 0.8em;
+    opacity: 0.5;
+}
+
+.sortable:hover .sort-icon {
+    opacity: 1;
+}
+
+.header-select {
+    font-size: 0.8rem;
+    padding: 0.1rem 0.2rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: white;
+    color: var(--text-primary);
+    max-width: 140px;
+}
+
+/* Latency Colors */
+.latency-micros {
+    color: #38a169;
+    font-weight: 600;
+}
+
+/* < 1ms (Green) */
+.latency-fast {
+    color: #3182ce;
+    font-weight: 600;
+}
+
+/* 1ms - 100ms (Blue) */
+.latency-avg {
+    color: #dd6b20;
+    font-weight: 600;
+}
+
+/* 100ms - 300ms (Orange) */
+.latency-slow {
+    color: #e53e3e;
+    font-weight: 600;
+}
+
+/* > 300ms (Red) */
+
+/* Column Styles */
+.col-time {
+    color: #555;
+    font-size: 0.9em;
+}
+
+.col-ip .clickable-ip {
+    color: #3182ce;
+    font-weight: 600;
+}
+
+.col-domain {
+    color: #2d3748;
+    font-weight: 600;
+}
+
+.col-type {
+    color: #805ad5;
+    font-weight: 700;
+    font-size: 0.9em;
+}
+
+.col-rcode {
+    color: #d69e2e !important;
+    font-weight: 600;
+    font-size: 0.9em;
+}
+
+.col-latency {
+    font-family: monospace;
+    font-size: 0.95em;
+    /* Removed default color to let specific classes take precedence */
+}
+
+/* Pagination */
+.pagination {
+    background: #f8fafc;
+    border-radius: 0 0 12px 12px;
+    border-top: 1px solid var(--border-color);
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pagination button {
+    background: white;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    font-size: 1rem;
+    padding: 0.6rem 1.5rem;
+    font-weight: 600;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination button:not(:disabled):hover {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* CSS for Fused Header Filter */
+.th-content.header-filter {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.header-overlay-select {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    /* Make invisible but clickable */
+    cursor: pointer;
+    z-index: 10;
+}
+
+.filter-icon {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    transition: transform 0.2s;
+}
+
+/* Adjust standard inputs/selects in toolbar */
+.filter-group select {
+    padding: 0.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--card-bg);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .app-container {
+        padding: 12px;
+    }
+
+    .top-bar {
+        padding: 1rem;
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .logo {
+        font-size: 1.25rem;
+    }
+
+    /* Query Log Header */
+    .log-header-top {
+        flex-direction: column;
+        /* Stack Title and Controls */
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .log-controls {
+        width: 100%;
+        /* Full width */
+        display: flex;
+        gap: 10px;
+    }
+
+    .log-controls button {
+        flex-shrink: 0;
+        /* Keep button size */
+    }
+
+    .log-controls .search-box {
+        flex-grow: 1;
+        /* Search box fills remaining space */
+    }
+
+    .search-box input {
+        width: 100%;
+        /* Input fills container */
+    }
+
+    /* Filters */
+    .filters-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .mobile-filters {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+        padding-top: 10px;
+        border-top: 1px dashed var(--border-color);
+        margin-top: 5px;
+    }
+
+    .mobile-filter-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .mobile-filter-item label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+    }
+
+    .mobile-filters select {
+        width: 100%;
+        padding: 0.6rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        background-color: white;
+    }
+
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .filter-group input {
+        width: 100%;
+    }
+
+    .ml-auto {
+        margin-left: 0;
+        width: 100%;
+        /* Reset Filter button full width */
+    }
+
+    .pagination {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .pagination div {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .pagination button {
+        width: 100%;
+    }
+
+    /* 
+     * Mobile Card View for Logs Table 
+     * Force table to not be like tables anymore
+    */
+    .logs-table,
+    .logs-table thead,
+    .logs-table tbody,
+    .logs-table th,
+    .logs-table td,
+    .logs-table tr {
+        display: block;
+    }
+
+    /* Hide table headers (but not display: none;, for accessibility) */
+    .logs-table thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    .logs-table tr {
+        margin-bottom: 1rem;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--border-color);
+        padding: 0.5rem;
+    }
+
+    .logs-table td {
+        /* Behave like a "row" */
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+        white-space: normal;
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0.5rem;
+    }
+
+    .logs-table td:last-child {
+        border-bottom: none;
+    }
+
+    .logs-table td::before {
+        /* Now like a table header */
+        position: static;
+        /* Top/left values mimic padding */
+        width: 40%;
+        white-space: nowrap;
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--text-secondary);
+        text-align: left;
+    }
+
+    /* Adjust content alignment */
+    .logs-table td>span,
+    .logs-table td>div {
+        text-align: right;
+        max-width: 60%;
+        word-break: break-all;
+    }
+
+    /* Specific adjustments for long content */
+    .col-domain {
+        text-align: right;
+        width: 60%;
+    }
+}

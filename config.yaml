@@ -1,0 +1,18 @@
+# mosdns 日志文件位置
+log_path: "mosdns.log"
+# mosdns 日志文件清理大小（单位MB），超过30M直接清空
+log_max_size_mb: 30
+# mosdns 日志文件检查时间间隔（单位分钟）
+log_check_interval_mins: 60
+
+# 数据库数据保留最近7天的日志数据
+db_retention_days: 7
+# 数据库储存的日志，检查时间间隔（只保留最近7天的）
+db_check_interval_mins: 60
+
+# 程序运行日志文件位置（留空回退到标准输出（stdout）)
+app_log_path: ""
+# 程序运行日志，输出日志的等级（默认Info）
+app_log_level: "info"
+# 程序端口
+port: "8080"

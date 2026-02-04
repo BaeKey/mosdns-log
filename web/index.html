@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MosDNS 日志分析</title>
+    <!-- Added cache busting -->
+    <link rel="stylesheet" href="css/style.css?v=2">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div class="logo">
+                <span class="icon">🛡️</span>
+                MosDNS 日志分析
+            </div>
+
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Stats Grid -->
+            <section class="stats-grid">
+                <div class="card stat-card">
+                    <div class="stat-title">mosdns平均响应延迟</div>
+                    <div class="stat-value" id="lat-1d">0ms</div>
+                    <div class="stat-meta">最近24小时</div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-title">mosdns平均响应延迟</div>
+                    <div class="stat-value" id="lat-7d">0ms</div>
+                    <div class="stat-meta">最近7天</div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-title">上游DNS平均响应延迟</div>
+                    <div class="stat-value" id="up-lat-1d">0ms</div>
+                    <div class="stat-meta">最近24小时（仅统计 &ge;1ms 的查询）</div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-title">上游DNS平均响应延迟</div>
+                    <div class="stat-value" id="up-lat-7d">0ms</div>
+                    <div class="stat-meta">最近7天（仅统计 &ge;1ms 的查询）</div>
+                </div>
+            </section>
+
+            <!-- Logs -->
+
+            <section class="logs-section card">
+                <div class="card-header log-header-container">
+                    <div class="log-header-top">
+                        <h3>查询日志</h3>
+                        <div class="log-controls">
+                            <button id="refresh-logs" class="btn-secondary">刷新列表</button>
+                            <div class="search-box">
+                                <input type="text" id="log-search" placeholder="搜索域名...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filters Toolbar -->
+                    <div class="filters-toolbar">
+                        <div class="filter-group">
+                            <label>时间范围:</label>
+                            <input type="datetime-local" id="filter-start">
+                            <span>至</span>
+                            <input type="datetime-local" id="filter-end">
+                        </div>
+
+                        <!-- Mobile Filters (Hidden on Desktop) -->
+                        <div class="mobile-filters">
+                            <div class="mobile-filter-item">
+                                <label>客户端 IP</label>
+                                <select id="mobile-ip-filter">
+                                    <option value="">所有 IP</option>
+                                </select>
+                            </div>
+                            <div class="mobile-filter-item">
+                                <label>类型</label>
+                                <select id="mobile-type-filter">
+                                    <option value="">所有类型</option>
+                                </select>
+                            </div>
+                            <div class="mobile-filter-item">
+                                <label>RCode</label>
+                                <select id="mobile-rcode-filter">
+                                    <option value="">所有 RCode</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                        <button id="reset-filters" class="btn-secondary ml-auto">重置筛选</button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="logs-table">
+                        <thead>
+                            <tr>
+                                <th class="sortable" data-sort="time">
+                                    <div class="th-content">
+                                        时间 <span class="sort-icon" id="sort-icon-time">↓</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="th-content header-filter">
+                                        <span>客户端 IP</span>
+                                        <select id="header-ip-filter" class="header-overlay-select"
+                                            onclick="event.stopPropagation()">
+                                            <option value="">全部</option>
+                                        </select>
+                                        <span class="filter-icon">▾</span>
+                                    </div>
+                                </th>
+                                <th>域名</th>
+                                <th>
+                                    <div class="th-content header-filter">
+                                        <span>类型</span>
+                                        <select id="header-type-filter" class="header-overlay-select"
+                                            onclick="event.stopPropagation()">
+                                            <option value="">全部</option>
+                                        </select>
+                                        <span class="filter-icon">▾</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="th-content header-filter">
+                                        <span>RCode</span>
+                                        <select id="header-rcode-filter" class="header-overlay-select"
+                                            onclick="event.stopPropagation()">
+                                            <option value="">全部</option>
+                                        </select>
+                                        <span class="filter-icon">▾</span>
+                                    </div>
+                                </th>
+                                <th class="sortable" data-sort="latency">
+                                    <div class="th-content">
+                                        耗时 <span class="sort-icon" id="sort-icon-latency">↕</span>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="logs-body">
+                            <!-- Logs will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination">
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <select id="page-size"
+                            style="padding: 0.25rem 0.5rem; border: 1px solid var(--border-color); border-radius: 4px;">
+                            <option value="50">50 条/页</option>
+                            <option value="100">100 条/页</option>
+                            <option value="200">200 条/页</option>
+                            <option value="500">500 条/页</option>
+                        </select>
+                        <span id="page-info" style="color: var(--text-secondary); font-size: 0.875rem;">第 1 页</span>
+                    </div>
+                    <button id="prev-page" disabled>上一页</button>
+                    <button id="next-page">下一页</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Added cache busting -->
+    <script src="js/app.js?v=2"></script>
+</body>
+
+</html>
