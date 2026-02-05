@@ -78,6 +78,11 @@ func run() error {
 		return fmt.Errorf("failed to connect database: %w", err)
 	}
 
+	db.Exec("PRAGMA synchronous = NORMAL;")
+	db.Exec("PRAGMA temp_store = memory;")
+	db.Exec("PRAGMA cache_size = -8000;")
+	db.Exec("PRAGMA mmap_size = 134217728;")
+	db.Exec("PRAGMA wal_autocheckpoint = 1000;")
 	// Migrate
 	if err := db.AutoMigrate(&model.QueryLog{}); err != nil {
 		return fmt.Errorf("failed to migrate database: %w", err)
