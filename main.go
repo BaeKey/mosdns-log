@@ -69,7 +69,8 @@ func run() error {
 	}
 
 	// Enable WAL mode for better concurrency and set busy timeout
-	dsn := fmt.Sprintf("%s?_journal_mode=WAL&_busy_timeout=5000", DBFile)
+	// glebarez/sqlite uses _pragma parameter format
+	dsn := fmt.Sprintf("%s?_pragma=journal_mode(WAL)&_pragma=busy_timeout(5000)", DBFile)
 	db, err := gorm.Open(sqlite.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Error),
 	})

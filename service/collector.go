@@ -72,41 +72,41 @@
 		c.wg.Wait()
 	}
 
-	func (c *Collector) dbWorker() {
-		defer c.wg.Done()
+func (c *Collector) dbWorker() {
+	defer c.wg.Done()
 
-		const sqlHeader = "INSERT INTO query_logs (client_ip, protocol, server_name, q_name, q_type, q_class, r_code, elapsed, time) VALUES "
+	const sqlHeader = "INSERT INTO query_logs (client_ip, q_name, q_type, r_code, elapsed, time) VALUES "
 
-		for batch := range c.batchChan {
-			c.execRawInsert(sqlHeader, batch)
-		}
+	for batch := range c.batchChan {
+		c.execRawInsert(sqlHeader, batch)
+	}
+}
+
+func (c *Collector) execRawInsert(sqlHeader string, logs []*model.QueryLog) {
+	if len(logs) == 0 {
+		return
 	}
 
-	func (c *Collector) execRawInsert(sqlHeader string, logs []*model.QueryLog) {
-		if len(logs) == 0 {
-			return
-		}
+	valArgs := make([]interface{}, 0, len(logs)*6)
+	placeholders := make([]string, 0, len(logs))
 
-		valArgs := make([]interface{}, 0, len(logs)*9)
-		placeholders := make([]string, 0, len(logs))
-
-		for _, l := range logs {
-			placeholders = append(placeholders, "(?, ?, ?, ?, ?, ?, ?, ?, ?)")
-			valArgs = append(valArgs,
-				l.ClientIP, l.Protocol, l.ServerName, l.QName,
-				l.QType, l.QClass, l.RCode, l.Elapsed, l.Time,
-			)
-		}
-
-		var sb strings.Builder
-		sb.WriteString(sqlHeader)
-		sb.WriteString(strings.Join(placeholders, ","))
-
-		err := c.db.WithContext(c.ctx).Exec(sb.String(), valArgs...).Error
-		if err != nil {
-			slog.Error("[DB] Insert failed", "error", err)
-		}
+	for _, l := range logs {
+		placeholders = append(placeholders, "(?, ?, ?, ?, ?, ?)")
+		valArgs = append(valArgs,
+			l.ClientIP, l.QName,
+			l.QType, l.RCode, l.Elapsed, l.Time,
+		)
 	}
+
+	var sb strings.Builder
+	sb.WriteString(sqlHeader)
+	sb.WriteString(strings.Join(placeholders, ","))
+
+	err := c.db.WithContext(c.ctx).Exec(sb.String(), valArgs...).Error
+	if err != nil {
+		slog.Error("[DB] Insert failed", "error", err)
+	}
+}
 
 	func (c *Collector) tailWorker() {
 		defer c.wg.Done()
@@ -204,15 +204,12 @@
 		}
 
 		dur, _ := time.ParseDuration(p.Elapsed)
-		qname := strings.TrimSuffix(p.QName, ".")
+		qname := strings.Clone(strings.TrimSuffix(p.QName, "."))
 
 		return &model.QueryLog{
-			ClientIP:   p.Client,
-			Protocol:   p.Protocol,
-			ServerName: p.ServerName,
+			ClientIP:   strings.Clone(p.Client),
 			QName:      qname,
 			QType:      p.QType,
-			QClass:     p.QClass,
 			RCode:      p.RespRCode,
 			Elapsed:    dur.Microseconds(),
 			Time:       c.parseTime(text),
